@@ -1,0 +1,202 @@
+[
+    {
+        "name": "A1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "A2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "A3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "A4",
+        "isBooked": true,
+        "isSelected": false
+    },
+    {
+        "name": "B1",
+        "isBooked": true,
+        "isSelected": false
+    },
+    {
+        "name": "B2",
+        "isBooked": true,
+        "isSelected": false
+    },
+    {
+        "name": "B3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "B4",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "C1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "C2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "C3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "C4",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "D1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "D2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "D3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "D4",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "E1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "E2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "E3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "E4",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "F1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "F2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "F3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "F4",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "G1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "G2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "G3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "G4",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "H1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "H2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "H3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "H4",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "I1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "I2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "I3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "I4",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "J1",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "J2",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "J3",
+        "isBooked": false,
+        "isSelected": false
+    },
+    {
+        "name": "J4",
+        "isBooked": false,
+        "isSelected": false
+    }
+]
