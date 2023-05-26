@@ -10,8 +10,8 @@ import java.util.Objects;
 
 public class Login extends Application {
 
-    private static final int INIT_WIDTH = 840;
-    private static final int INIT_HEIGHT = 580;
+    public static final int INIT_WIDTH = 840;
+    public static final int INIT_HEIGHT = 580;
 
     public static void main(String[] args) {
         launch(args);

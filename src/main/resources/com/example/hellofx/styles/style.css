@@ -1,4 +1,8 @@
 .loginMainContainer{
-    -fx-background-image: url("../images/background.jpg");
+    -fx-background-image: url("../images/login_background.jpg");
+    -fx-background-size: cover;
+}
+.registerMainContainer{
+    -fx-background-image: url("../images/register_background.jpg");
     -fx-background-size: cover;
 }

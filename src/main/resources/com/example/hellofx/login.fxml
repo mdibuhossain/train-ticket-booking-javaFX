@@ -12,7 +12,6 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="anchorMainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="840.0" styleClass="loginMainContainer" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellofx.LoginController">
    <children>
       <VBox fx:id="subContainer" alignment="CENTER" layoutX="275.0" layoutY="150.0" prefHeight="128.0" prefWidth="290.0" spacing="20.0" style="-fx-padding: 25; -fx-background-color: white; -fx-background-radius: 15;" stylesheets="@styles/style.css">
@@ -44,7 +43,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Hyperlink focusTraversable="false" text="Don't have an account? Registration" />
+            <Hyperlink focusTraversable="false" onAction="#switchToRegister" text="Don't have an account? Registration" />
          </children>
          <effect>
             <DropShadow height="32.72" offsetX="3.0" offsetY="-3.0" radius="18.7925" width="44.45">
