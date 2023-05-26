@@ -41,11 +41,11 @@ public class TicketCounterController implements Initializable {
                 seat.setText(Integer.toString(cnt++));
                 seat.setPrefSize(30, 30);
                 if (cnt % 3 == 0) {
-                    seat.setStyle("-fx-background-color: gray;");
+//                    seat.setStyle("-fx-background-color: red;");
                     seat.setDisable(true);
                 }
                 else
-                    seat.setStyle("-fx-background-color: orange;");
+                    seat.setStyle("-fx-background-color: lime;");
 //                ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("images/available_seat.png"))));
 //                imageView.setFitWidth(30);
 //                imageView.setFitHeight(30);
@@ -59,10 +59,10 @@ public class TicketCounterController implements Initializable {
         for (Node node : seatGrid.getChildren()) {
             if (node instanceof Button button) {
                 button.addEventHandler(ActionEvent.ACTION, event -> {
-                    if (button.getStyle().equals("-fx-background-color: red;")) {
-                        button.setStyle("-fx-background-color: orange;");
+                    if (button.getStyle().equals("-fx-background-color: #fc99ff;")) {
+                        button.setStyle("-fx-background-color: lime;");
                     } else {
-                        button.setStyle("-fx-background-color: red;");
+                        button.setStyle("-fx-background-color: #fc99ff;");
                     }
                 });
             }
