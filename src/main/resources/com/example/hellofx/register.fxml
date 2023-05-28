@@ -14,34 +14,44 @@
 
 <AnchorPane fx:id="anchorMainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="840.0" styleClass="registerMainContainer" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellofx.LoginController">
    <children>
-      <VBox fx:id="subContainer" alignment="CENTER" layoutX="275.0" layoutY="104.0" prefHeight="128.0" prefWidth="290.0" spacing="20.0" style="-fx-padding: 25; -fx-background-color: white; -fx-background-radius: 15;" stylesheets="@styles/style.css">
+      <VBox fx:id="subContainer" alignment="CENTER" layoutX="275.0" layoutY="73.0" prefHeight="128.0" prefWidth="290.0" spacing="15.0" style="-fx-padding: 25; -fx-background-color: white; -fx-background-radius: 15;" stylesheets="@styles/style.css">
          <children>
             <Label text="Register new account">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="emailTextField1" onAction="#handleLogin" prefHeight="25.0" prefWidth="229.0" promptText="Your full name">
+            <TextField fx:id="fullNameField" onAction="#handleRegister" prefHeight="25.0" prefWidth="229.0" promptText="Your full name">
                <font>
                   <Font size="15.0" />
                </font>
             </TextField>
-            <TextField fx:id="emailTextField" onAction="#handleLogin" prefHeight="25.0" prefWidth="229.0" promptText="Your Email">
+            <TextField fx:id="emailTextField" onAction="#handleRegister" prefHeight="25.0" prefWidth="229.0" promptText="Your Email">
                <font>
                   <Font size="15.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="passwordField" onAction="#handleLogin" prefHeight="25.0" prefWidth="229.0" promptText="Enter password">
+            <PasswordField fx:id="passwordField" onAction="#handleRegister" prefHeight="25.0" prefWidth="229.0" promptText="Enter password">
                <font>
                   <Font size="15.0" />
                </font>
             </PasswordField>
-            <PasswordField fx:id="passwordField1" onAction="#handleLogin" prefHeight="25.0" prefWidth="229.0" promptText="Confirm password">
+            <PasswordField fx:id="confirmPasswordField" onAction="#handleRegister" prefHeight="25.0" prefWidth="229.0" promptText="Confirm password">
                <font>
                   <Font size="15.0" />
                </font>
             </PasswordField>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleLogin" prefHeight="25.0" prefWidth="229.0" style="-fx-background-color: lime;" text="SIGN UP">
+            <TextField fx:id="phoneNumberField" onAction="#handleRegister" prefHeight="25.0" prefWidth="229.0" promptText="Phone number">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="addressField" onAction="#handleRegister" prefHeight="25.0" prefWidth="229.0" promptText="Your address">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextField>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleRegister" prefHeight="25.0" prefWidth="229.0" style="-fx-background-color: lime;" text="SIGN UP">
                <effect>
                   <DropShadow>
                      <color>

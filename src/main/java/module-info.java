@@ -6,4 +6,5 @@ module com.example.hellofx {
 
     opens com.example.hellofx to javafx.fxml;
     exports com.example.hellofx;
+    exports com.example.hellofx.models;
 }

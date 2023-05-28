@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -32,9 +34,17 @@ public class LoginController implements Initializable {
     @FXML
     private VBox subContainer;
     @FXML
+    private TextField fullNameField;
+    @FXML
     private TextField emailTextField;
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private PasswordField confirmPasswordField;
+    @FXML
+    private TextField phoneNumberField;
+    @FXML
+    private TextField addressField;
 
     @FXML
     public void switchToRegister(ActionEvent event) throws IOException {
@@ -60,6 +70,15 @@ public class LoginController implements Initializable {
         stage.show();
     }
 
+    public void clearInput() {
+        fullNameField.setText("");
+        emailTextField.setText("");
+        passwordField.setText("");
+        confirmPasswordField.setText("");
+        phoneNumberField.setText("");
+        addressField.setText("");
+    }
+
     @FXML
     public void handleLogin(ActionEvent event) {
         String email = emailTextField.getText();
@@ -72,10 +91,54 @@ public class LoginController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(null);
-        if (email.length() > 0 && password.length() > 0) alert.setContentText("Login Successful!");
-        else alert.setContentText("Invalid username and password!");
+        if (email.length() > 0 && password.length() > 0) {
+            alert.setContentText("Login Successful!");
+            clearInput();
+        } else {
+            alert.setContentText("Invalid username and password!");
+        }
         alert.showAndWait();
     }
+
+    @FXML
+    public void handleRegister(ActionEvent event) {
+        String fullName = fullNameField.getText();
+        String email = emailTextField.getText();
+        String password = passwordField.getText();
+        String confimPassword = confirmPasswordField.getText();
+        String phoneNumber = phoneNumberField.getText();
+        String address = addressField.getText();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        String sql = """
+                INSERT INTO users(user_id, full_name, email, password, phone_number, address) VALUES(DEFAULT, ?, ?, ?, ?, ?)
+                """;
+        try {
+            PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
+            preparedStatement.setString(1, fullName);
+            preparedStatement.setString(2, email);
+            preparedStatement.setString(3, password);
+            preparedStatement.setString(4, phoneNumber);
+            preparedStatement.setString(5, address);
+            int userCreated = preparedStatement.executeUpdate();
+            if (userCreated == 1) {
+                alert.setContentText("Login Successful!");
+                clearInput();
+                switchToLogin(event);
+                alert.showAndWait();
+            } else {
+                alert.setContentText("Something went wrong!");
+                alert.showAndWait();
+            }
+        } catch (SQLException e) {
+            alert.setContentText("Something went wrong!");
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

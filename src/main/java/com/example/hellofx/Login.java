@@ -8,12 +8,15 @@ import javafx.stage.Stage;
 
 import java.util.Objects;
 
+import static com.example.hellofx.DBController.getConnection;
+
 public class Login extends Application {
 
     public static final int INIT_WIDTH = 840;
     public static final int INIT_HEIGHT = 580;
 
     public static void main(String[] args) {
+        getConnection();
         launch(args);
     }
 
