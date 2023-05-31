@@ -1,6 +1,8 @@
 package com.example.hellofx;
 
 import com.example.hellofx.Login;
+import com.example.hellofx.models.User;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +21,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -71,34 +75,42 @@ public class LoginController implements Initializable {
     }
 
     public void clearInput() {
-        fullNameField.setText("");
+//        fullNameField.setText("");
         emailTextField.setText("");
         passwordField.setText("");
-        confirmPasswordField.setText("");
-        phoneNumberField.setText("");
-        addressField.setText("");
+//        confirmPasswordField.setText("");
+//        phoneNumberField.setText("");
+//        addressField.setText("");
     }
 
     @FXML
     public void handleLogin(ActionEvent event) {
         String email = emailTextField.getText();
         String password = passwordField.getText();
-
-        System.out.println(email);
-        System.out.println(password);
-        // TODO: Implement login validation and open appropriate window
-
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
-        alert.setHeaderText(null);
-        if (email.length() > 0 && password.length() > 0) {
-            alert.setContentText("Login Successful!");
-            clearInput();
-        } else {
-            alert.setContentText("Invalid username and password!");
+
+        String sql = "SELECT * FROM users WHERE email='" + email + "' AND password='" + password + "'";
+        try {
+            ResultSet resultSet = DBController.statement.executeQuery(sql);
+            List<User> checkUser = RowMapper.userRowMapper(resultSet);
+            if (checkUser.size() > 0) {
+                alert.setContentText("Login Successful!");
+                clearInput();
+                alert.showAndWait();
+                Platform.setImplicitExit(false);
+                Login.openDashBoard();
+            } else {
+                alert.setContentText("Invalid username and password!");
+                alert.showAndWait();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        alert.showAndWait();
+
+        alert.setHeaderText(null);
     }
+
 
     @FXML
     public void handleRegister(ActionEvent event) {
@@ -112,7 +124,7 @@ public class LoginController implements Initializable {
         alert.setTitle("Information");
         alert.setHeaderText(null);
         String sql = """
-                INSERT INTO users(user_id, full_name, email, password, phone_number, address) VALUES(DEFAULT, ?, ?, ?, ?, ?)
+                INSERT INTO users(full_name, email, password, phone_number, address) VALUES(?, ?, ?, ?, ?)
                 """;
         try {
             PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
@@ -123,16 +135,20 @@ public class LoginController implements Initializable {
             preparedStatement.setString(5, address);
             int userCreated = preparedStatement.executeUpdate();
             if (userCreated == 1) {
-                alert.setContentText("Login Successful!");
+                alert.setContentText("Successfully registered!");
                 clearInput();
-                switchToLogin(event);
                 alert.showAndWait();
+                switchToLogin(event);
             } else {
                 alert.setContentText("Something went wrong!");
                 alert.showAndWait();
             }
+        } catch (java.sql.SQLIntegrityConstraintViolationException ignore) {
+            alert.setContentText("This email already registered!");
+            alert.showAndWait();
         } catch (SQLException e) {
             alert.setContentText("Something went wrong!");
+            alert.showAndWait();
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);

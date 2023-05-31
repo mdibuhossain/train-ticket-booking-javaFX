@@ -11,20 +11,22 @@ public class User {
     public User() {
     }
 
-    public User(int user_id, String full_name, String email, String phone_number, String address) {
+    public User(int user_id, String full_name, String email, String password, String phone_number, String address) {
         this.user_id = user_id;
-        this.full_name = full_name;
-        this.email = email;
-        this.phone_number = phone_number;
-        this.address = address;
-    }
-
-    public User(String full_name, String email, String password, String phone_number, String address) {
         this.full_name = full_name;
         this.email = email;
         this.password = password;
         this.phone_number = phone_number;
         this.address = address;
+    }
+
+    public User(User tmp) {
+        this.user_id = tmp.user_id;
+        this.full_name = tmp.full_name;
+        this.email = tmp.email;
+        this.password = tmp.password;
+        this.phone_number = tmp.phone_number;
+        this.address = tmp.address;
     }
 
     public int getUser_id() {
@@ -69,5 +71,11 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    @Override
+    public String toString() {
+        return full_name + " " + email + " " + password;
     }
 }
