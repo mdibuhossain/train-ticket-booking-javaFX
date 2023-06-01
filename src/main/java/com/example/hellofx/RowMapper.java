@@ -1,5 +1,6 @@
 package com.example.hellofx;
 
+import com.example.hellofx.models.Station;
 import com.example.hellofx.models.User;
 
 import java.sql.ResultSet;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RowMapper {
-    public static List<User> userRowMapper(ResultSet resultSet) {
+    public static List<User> userMapper(ResultSet resultSet) {
         List<User> users = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -26,5 +27,17 @@ public class RowMapper {
             System.out.println("Something went wrong!");
             return users;
         }
+    }
+
+    public static List<Station> stationMapper(ResultSet resultSet) {
+        List<Station> stations = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                stations.add(new Station(resultSet.getInt("station_id"), resultSet.getString("station_name")));
+            }
+        } catch (SQLException ignore) {
+            System.out.println("Something went wrong!");
+        }
+        return stations;
     }
 }

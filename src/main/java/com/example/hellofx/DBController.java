@@ -5,7 +5,7 @@ import com.example.hellofx.models.User;
 import java.sql.*;
 import java.util.List;
 
-import static com.example.hellofx.RowMapper.userRowMapper;
+import static com.example.hellofx.RowMapper.userMapper;
 
 public class DBController {
 
@@ -40,11 +40,11 @@ public class DBController {
                     FROM users
                 """;
         ResultSet resultSet = statement.executeQuery(query);
-        List<User> users = userRowMapper(resultSet);
+        List<User> users = userMapper(resultSet);
         for (int i = 0; i < users.size(); i++) {
             System.out.println(users.get(i).getFull_name());
         }
-        userRowMapper(resultSet);
+        userMapper(resultSet);
     }
 
 }

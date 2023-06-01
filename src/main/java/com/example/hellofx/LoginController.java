@@ -1,8 +1,6 @@
 package com.example.hellofx;
 
-import com.example.hellofx.Login;
 import com.example.hellofx.models.User;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -93,7 +91,7 @@ public class LoginController implements Initializable {
         String sql = "SELECT * FROM users WHERE email='" + email + "' AND password='" + password + "'";
         try {
             ResultSet resultSet = DBController.statement.executeQuery(sql);
-            List<User> checkUser = RowMapper.userRowMapper(resultSet);
+            List<User> checkUser = RowMapper.userMapper(resultSet);
             if (checkUser.size() > 0) {
                 alert.setContentText("Login Successful!");
                 clearInput();
