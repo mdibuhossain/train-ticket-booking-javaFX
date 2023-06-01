@@ -43,9 +43,7 @@ public class TicketCounterController implements Initializable {
                 if (cnt % 3 == 0) {
 //                    seat.setStyle("-fx-background-color: red;");
                     seat.setDisable(true);
-                }
-                else
-                    seat.setStyle("-fx-background-color: lime;");
+                } else seat.setStyle("-fx-background-color: lime;");
 //                ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("images/available_seat.png"))));
 //                imageView.setFitWidth(30);
 //                imageView.setFitHeight(30);

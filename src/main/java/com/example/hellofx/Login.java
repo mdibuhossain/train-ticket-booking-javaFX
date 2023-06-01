@@ -34,6 +34,7 @@ public class Login extends Application {
         primaryStage.setMinHeight(INIT_HEIGHT);
         primaryStage.setResizable(true);
         primaryStage.show();
+        primaryStage.setOnCloseRequest(windowEvent -> Platform.exit());
     }
 
     public static void openDashBoard() {
@@ -44,6 +45,9 @@ public class Login extends Application {
             dashboardStage.setScene(new Scene(root));
             dashboardStage.show();
             primaryStage.hide();
+            dashboardStage.setOnCloseRequest(windowEvent -> {
+                primaryStage.show();
+            });
         } catch (IOException ignore) {
 
         }
