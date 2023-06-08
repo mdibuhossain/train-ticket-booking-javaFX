@@ -5,6 +5,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -58,6 +60,14 @@
                         </DropShadow>
                      </effect>
                   </VBox>
+                  <TreeTableView layoutX="29.0" layoutY="31.0" prefHeight="270.0" prefWidth="651.0">
+                    <columns>
+                      <TreeTableColumn prefWidth="54.0" text="No." />
+                      <TreeTableColumn prefWidth="230.0" text="From" />
+                        <TreeTableColumn prefWidth="229.0" text="To" />
+                        <TreeTableColumn prefWidth="137.0" text="Time" />
+                    </columns>
+                  </TreeTableView>
                </children>
             </AnchorPane>
          </content>

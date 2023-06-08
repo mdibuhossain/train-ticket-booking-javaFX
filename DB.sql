@@ -26,8 +26,7 @@ CREATE TABLE trips (
     trip_id INT PRIMARY KEY AUTO_INCREMENT,
     source_station_id INT,
     destination_station_id INT,
-    departure_time DATETIME,
-    arrival_time DATETIME,
+    trip_time DATETIME,
     total_seats INT,
     FOREIGN KEY (source_station_id) REFERENCES stations(station_id),
     FOREIGN KEY (destination_station_id) REFERENCES stations(station_id)
@@ -37,14 +36,17 @@ CREATE TABLE booking (
     booking_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     trip_id INT,
+    seat_number INT,
     booking_time DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (trip_id) REFERENCES trips(trip_id)
 );
 
-CREATE TABLE seats (
+CREATE TABLE seat_booked (
     seat_id INT PRIMARY KEY AUTO_INCREMENT,
+    trip_id INT,
     booking_id INT,
     seat_number INT,
+    FOREIGN KEY (trip_id) REFERENCES trip(trip_id),
     FOREIGN KEY (booking_id) REFERENCES booking(booking_id)
 );

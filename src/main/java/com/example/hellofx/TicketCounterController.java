@@ -9,6 +9,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -24,6 +25,8 @@ public class TicketCounterController implements Initializable {
     private ComboBox<String> dropDownFrom;
     @FXML
     private ComboBox<String> dropDownTo;
+    @FXML
+    private TreeTableView
 
 
     @Override
