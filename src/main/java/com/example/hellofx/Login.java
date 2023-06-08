@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Statement;
 import java.util.Objects;
 
 import static com.example.hellofx.DBController.getConnection;
@@ -37,7 +36,7 @@ public class Login extends Application {
         primaryStage.setOnCloseRequest(windowEvent -> Platform.exit());
     }
 
-    public static void openDashBoard() {
+    public static void openDashboard() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(Login.class.getResource("ticket_counter.fxml")));
             Stage dashboardStage = new Stage();
@@ -49,7 +48,22 @@ public class Login extends Application {
                 primaryStage.show();
             });
         } catch (IOException ignore) {
-
         }
     }
+    public static void openAdminDashboard() {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(Login.class.getResource("admin_dashboard.fxml")));
+            Stage dashboardStage = new Stage();
+            dashboardStage.setTitle("Admin Dashboard");
+            dashboardStage.setScene(new Scene(root));
+            dashboardStage.show();
+            primaryStage.hide();
+            dashboardStage.setOnCloseRequest(windowEvent -> {
+                primaryStage.show();
+            });
+        } catch (IOException ignore) {
+        }
+    }
+
+
 }

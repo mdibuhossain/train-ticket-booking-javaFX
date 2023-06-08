@@ -5,8 +5,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -20,7 +20,7 @@
 
 <BorderPane prefHeight="760.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellofx.TicketCounterController">
    <center>
-      <ScrollPane hbarPolicy="NEVER" prefHeight="644.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+      <ScrollPane focusTraversable="false" hbarPolicy="NEVER" prefHeight="644.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <content>
             <AnchorPane prefHeight="592.0" prefWidth="1000.0">
                <children>
@@ -60,14 +60,14 @@
                         </DropShadow>
                      </effect>
                   </VBox>
-                  <TreeTableView layoutX="29.0" layoutY="31.0" prefHeight="270.0" prefWidth="651.0">
+                  <TableView focusTraversable="false" layoutX="33.0" layoutY="31.0" prefHeight="200.0" prefWidth="642.0">
                     <columns>
-                      <TreeTableColumn prefWidth="54.0" text="No." />
-                      <TreeTableColumn prefWidth="230.0" text="From" />
-                        <TreeTableColumn prefWidth="229.0" text="To" />
-                        <TreeTableColumn prefWidth="137.0" text="Time" />
+                      <TableColumn editable="false" prefWidth="54.0" sortable="false" text="No." />
+                      <TableColumn editable="false" prefWidth="221.0" sortable="false" text="From" />
+                        <TableColumn editable="false" prefWidth="202.0" sortable="false" text="To" />
+                        <TableColumn editable="false" minWidth="0.0" prefWidth="164.0" sortable="false" text="Time" />
                     </columns>
-                  </TreeTableView>
+                  </TableView>
                </children>
             </AnchorPane>
          </content>

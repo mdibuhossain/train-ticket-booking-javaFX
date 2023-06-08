@@ -25,17 +25,12 @@ public class TicketCounterController implements Initializable {
     private ComboBox<String> dropDownFrom;
     @FXML
     private ComboBox<String> dropDownTo;
-    @FXML
-    private TreeTableView
+    private List<Station> stations;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initStation();
-//        dropDownFrom.getItems().addAll("Dhaka", "Khulna", "Chattogram", "Sylhet", "Rangpur", "Gopalganj");
-//        dropDownTo.getItems().addAll("Dhaka", "Khulna", "Chattogram", "Sylhet", "Rangpur", "Gopalganj");
-
-
         int cnt = 1;
         for (int i = 1; i <= 10; i++) {
             for (int j = 1; j <= 6; j++) {
@@ -70,10 +65,10 @@ public class TicketCounterController implements Initializable {
         String stationSQL = "SELECT * FROM stations ORDER BY station_name ASC";
         try {
             ResultSet resultSet = DBController.statement.executeQuery(stationSQL);
-            List<Station> stations = RowMapper.stationMapper(resultSet);
-            for (int i = 0; i < stations.size(); i++) {
-                dropDownFrom.getItems().add(stations.get(i).getStation_name());
-                dropDownTo.getItems().add(stations.get(i).getStation_name());
+            stations = RowMapper.stationMapper(resultSet);
+            for (Station station : stations) {
+                dropDownFrom.getItems().add(station.getStation_name());
+                dropDownTo.getItems().add(station.getStation_name());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

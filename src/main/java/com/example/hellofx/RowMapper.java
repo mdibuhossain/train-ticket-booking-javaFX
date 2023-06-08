@@ -19,7 +19,8 @@ public class RowMapper {
                 String password = resultSet.getString("password");
                 String phone_number = resultSet.getString("phone_number");
                 String address = resultSet.getString("address");
-                User user = new User(user_id, full_name, email, password, phone_number, address);
+                String role = resultSet.getString("role");
+                User user = new User(user_id, full_name, email, password, phone_number, address, role);
                 users.add(user);
             }
             return users;

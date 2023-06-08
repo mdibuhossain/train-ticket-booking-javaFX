@@ -92,12 +92,13 @@ public class LoginController implements Initializable {
         try {
             ResultSet resultSet = DBController.statement.executeQuery(sql);
             List<User> checkUser = RowMapper.userMapper(resultSet);
-            if (checkUser.size() > 0) {
+            if (checkUser.size() == 1) {
                 alert.setContentText("Login Successful!");
                 clearInput();
                 alert.showAndWait();
                 Platform.setImplicitExit(false);
-                Login.openDashBoard();
+                if (checkUser.get(0).getRole().equals("admin")) Login.openAdminDashboard();
+                else Login.openDashboard();
             } else {
                 alert.setContentText("Invalid username and password!");
                 alert.showAndWait();

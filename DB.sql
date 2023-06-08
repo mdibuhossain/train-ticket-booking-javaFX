@@ -14,7 +14,8 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    address VARCHAR(200) NOT NULL
+    address VARCHAR(200) NOT NULL,
+    role ENUM("admin", "regular") DEFAULT "regular"
 );
 
 CREATE TABLE stations (
@@ -47,6 +48,6 @@ CREATE TABLE seat_booked (
     trip_id INT,
     booking_id INT,
     seat_number INT,
-    FOREIGN KEY (trip_id) REFERENCES trip(trip_id),
+    FOREIGN KEY (trip_id) REFERENCES trips(trip_id),
     FOREIGN KEY (booking_id) REFERENCES booking(booking_id)
 );
