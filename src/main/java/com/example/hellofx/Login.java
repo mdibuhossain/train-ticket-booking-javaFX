@@ -50,6 +50,7 @@ public class Login extends Application {
         } catch (IOException ignore) {
         }
     }
+
     public static void openAdminDashboard() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(Login.class.getResource("admin_dashboard.fxml")));

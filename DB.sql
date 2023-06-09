@@ -15,7 +15,7 @@ CREATE TABLE users (
     password VARCHAR(50) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
     address VARCHAR(200) NOT NULL,
-    role ENUM("admin", "regular") DEFAULT "regular"
+    role ENUM("admin", "user") DEFAULT "user"
 );
 
 CREATE TABLE stations (
@@ -25,12 +25,12 @@ CREATE TABLE stations (
 
 CREATE TABLE trips (
     trip_id INT PRIMARY KEY AUTO_INCREMENT,
-    source_station_id INT,
-    destination_station_id INT,
-    trip_time DATETIME,
-    total_seats INT,
-    FOREIGN KEY (source_station_id) REFERENCES stations(station_id),
-    FOREIGN KEY (destination_station_id) REFERENCES stations(station_id)
+    source_station_name INT,
+    destination_station_name INT,
+    trip_date DATE,
+    trip_time VARCHAR(20),
+    FOREIGN KEY (source_station_name) REFERENCES stations(station_name),
+    FOREIGN KEY (destination_station_name) REFERENCES stations(station_name)
 );
 
 CREATE TABLE booking (
