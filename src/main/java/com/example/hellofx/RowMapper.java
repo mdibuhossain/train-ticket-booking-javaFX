@@ -1,7 +1,11 @@
 package com.example.hellofx;
 
 import com.example.hellofx.models.Station;
+import com.example.hellofx.models.Trip;
 import com.example.hellofx.models.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,5 +44,24 @@ public class RowMapper {
             System.out.println("Something went wrong!");
         }
         return stations;
+    }
+
+    public static ObservableList<Trip> TripMapper(ResultSet resultSet) {
+        ObservableList<Trip> trips = FXCollections.observableArrayList();
+        try {
+            while (resultSet.next()) {
+                trips.add(new Trip(
+                                resultSet.getInt("trip_id"),
+                                resultSet.getString("station_from"),
+                                resultSet.getString("station_to"),
+                                resultSet.getString("journey_date"),
+                                resultSet.getString("journey_time")
+                        )
+                );
+            }
+        } catch (SQLException ignore) {
+            System.out.println("Something went wrong!");
+        }
+        return trips;
     }
 }

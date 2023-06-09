@@ -121,7 +121,7 @@
                                           <Font name="Calibri" size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="500.0" layoutY="530.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="95.0" text="REFRESH">
+                                    <Button layoutX="500.0" layoutY="530.0" mnemonicParsing="false" onAction="#fetchTripTableData" prefHeight="27.0" prefWidth="95.0" text="REFRESH">
                                        <padding>
                                           <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                                        </padding>

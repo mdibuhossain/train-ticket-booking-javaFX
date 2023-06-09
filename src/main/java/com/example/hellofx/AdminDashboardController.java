@@ -63,7 +63,18 @@ public class AdminDashboardController implements Initializable {
         toColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("to"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("date"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("time"));
-        tripList = tripTable.getItems();
+        fetchTripTableData();
+    }
+
+    @FXML
+    private void fetchTripTableData() {
+        String sql = "SELECT * FROM trips";
+        try {
+            ResultSet resultSet = DBController.statement.executeQuery(sql);
+            tripList = RowMapper.TripMapper(resultSet);
+        } catch (Exception ignore) {
+            tripList = tripTable.getItems();
+        }
         tripTable.setItems(tripList);
     }
 
@@ -73,7 +84,7 @@ public class AdminDashboardController implements Initializable {
 
     private void formatDatePicker() {
         StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             @Override
             public String toString(LocalDate date) {
