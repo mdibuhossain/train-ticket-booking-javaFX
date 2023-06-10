@@ -68,7 +68,7 @@ public class AdminDashboardController implements Initializable {
         String sql = "SELECT * FROM trips";
         try {
             ResultSet resultSet = DBController.statement.executeQuery(sql);
-            tripList = RowMapper.TripMapper(resultSet);
+            tripList = RowMapper.tripMapper(resultSet);
         } catch (Exception ignore) {
             tripList = tripTable.getItems();
         }

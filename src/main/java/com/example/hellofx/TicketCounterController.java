@@ -22,8 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class TicketCounterController implements Initializable {
     @FXML
@@ -60,6 +59,7 @@ public class TicketCounterController implements Initializable {
     private Text booked_phoneNumber;
     private ObservableList<Trip> tripList;
     private List<Station> stations;
+    private Set<Integer> selectedSeats = new TreeSet<>();
     private User user = new User();
 
 
@@ -68,35 +68,8 @@ public class TicketCounterController implements Initializable {
         initStation();
         initTripTable();
         formatDatePicker();
-        int cnt = 1;
-        for (int i = 1; i <= 10; i++) {
-            for (int j = 1; j <= 6; j++) {
-                if (j == 3) continue;
-                Button seat = new Button();
-                seat.setText(Integer.toString(cnt++));
-                seat.setPrefSize(30, 30);
-                if (cnt % 3 == 0) {
-//                    seat.setStyle("-fx-background-color: red;");
-                    seat.setDisable(true);
-                } else seat.setStyle("-fx-background-color: lime;");
-                GridPane.setConstraints(seat, j - 1, i - 1);
-                GridPane.setHalignment(seat, HPos.CENTER);
-                GridPane.setValignment(seat, VPos.CENTER);
-                seatGrid.getChildren().add(seat);
-            }
-        }
-        for (Node node : seatGrid.getChildren()) {
-            if (node instanceof Button button) {
-                button.addEventHandler(ActionEvent.ACTION, event -> {
-                    if (button.getStyle().equals("-fx-background-color: #fc99ff;")) {
-                        button.setStyle("-fx-background-color: lime;");
-                    } else {
-                        button.setStyle("-fx-background-color: #fc99ff;");
-                    }
-                });
-            }
-        }
     }
+
 
     public void setUser(User tmpUser) {
         user = new User(tmpUser);
@@ -124,7 +97,7 @@ public class TicketCounterController implements Initializable {
             preparedStatement.setString(2, toText);
             preparedStatement.setString(3, date);
             ResultSet resultSet = preparedStatement.executeQuery();
-            tripList = RowMapper.TripMapper(resultSet);
+            tripList = RowMapper.tripMapper(resultSet);
         } catch (Exception ignore) {
             System.out.println(ignore.getMessage());
             tripList = tripTable.getItems();
@@ -197,9 +170,48 @@ public class TicketCounterController implements Initializable {
         String to = tripList.get(selectedID).getTo();
         String date = tripList.get(selectedID).getDate();
         String time = tripList.get(selectedID).getTime();
+        initSeats(tripList.get(selectedID).getTrip_id());
         initBookingInfo(from, to, date, time);
-        System.out.println("hello");
     }
 
-
+    private void initSeats(int trip_id) {
+        String sql = "SELECT * FROM booking WHERE trip_id='" + trip_id + "'";
+        try {
+            ResultSet resultSet = DBController.statement.executeQuery(sql);
+            Set<Integer> bookedSeats = new TreeSet<>(RowMapper.seatMapper(resultSet));
+            int cnt = 1;
+            for (int i = 1; i <= 10; i++) {
+                for (int j = 1; j <= 6; j++) {
+                    if (j == 3) continue;
+                    Button seat = new Button();
+                    seat.setText(Integer.toString(cnt++));
+                    seat.setPrefSize(30, 30);
+                    if (bookedSeats.contains(cnt)) {
+//                    seat.setStyle("-fx-background-color: red;");
+                        seat.setDisable(true);
+                    } else seat.setStyle("-fx-background-color: lime;");
+                    GridPane.setConstraints(seat, j - 1, i - 1);
+                    GridPane.setHalignment(seat, HPos.CENTER);
+                    GridPane.setValignment(seat, VPos.CENTER);
+                    seatGrid.getChildren().add(seat);
+                }
+            }
+            for (Node node : seatGrid.getChildren()) {
+                if (node instanceof Button button) {
+                    button.addEventHandler(ActionEvent.ACTION, event -> {
+                        if (button.getStyle().equals("-fx-background-color: #fc99ff;")) {
+                            selectedSeats.remove(Integer.valueOf(button.getText()));
+                            button.setStyle("-fx-background-color: lime;");
+                        } else {
+                            selectedSeats.add(Integer.valueOf(button.getText()));
+                            System.out.println(selectedSeats.toString());
+                            button.setStyle("-fx-background-color: #fc99ff;");
+                        }
+                    });
+                }
+            }
+        } catch (Exception ignore) {
+            System.out.println(ignore.getMessage());
+        }
+    }
 }

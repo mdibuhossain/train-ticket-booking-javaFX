@@ -1,16 +1,18 @@
 package com.example.hellofx;
 
+import com.example.hellofx.models.Booking;
 import com.example.hellofx.models.Station;
 import com.example.hellofx.models.Trip;
 import com.example.hellofx.models.User;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RowMapper {
     public static List<User> userMapper(ResultSet resultSet) {
@@ -46,7 +48,7 @@ public class RowMapper {
         return stations;
     }
 
-    public static ObservableList<Trip> TripMapper(ResultSet resultSet) {
+    public static ObservableList<Trip> tripMapper(ResultSet resultSet) {
         ObservableList<Trip> trips = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {
@@ -63,5 +65,35 @@ public class RowMapper {
             System.out.println("Something went wrong!");
         }
         return trips;
+    }
+
+    public static Set<Integer> seatMapper(ResultSet resultSet) {
+        Set<Integer> seats = new HashSet<>();
+        try {
+            while (resultSet.next()) {
+                seats.add(resultSet.getInt("seat_number"));
+            }
+        } catch (Exception ignore) {
+            System.out.println(ignore.getMessage());
+        }
+        return seats;
+    }
+
+    public static List<Booking> bookingMapper(ResultSet resultSet) {
+        List<Booking> bookingList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                bookingList.add(new Booking(
+                        resultSet.getInt("booking_id"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getInt("trip_id"),
+                        resultSet.getInt("seat_number"),
+                        resultSet.getString("booking_time")
+                ));
+            }
+        } catch (Exception ignore) {
+            System.out.println(ignore.getMessage());
+        }
+        return bookingList;
     }
 }
