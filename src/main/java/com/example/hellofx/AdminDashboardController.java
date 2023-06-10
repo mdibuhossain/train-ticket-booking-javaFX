@@ -2,8 +2,6 @@ package com.example.hellofx;
 
 import com.example.hellofx.models.Station;
 import com.example.hellofx.models.Trip;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -121,8 +118,9 @@ public class AdminDashboardController implements Initializable {
                 dropDownTo.getItems().add(station.getStation_name());
                 stationListView.getItems().add(station.getStation_name());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException ignore) {
+            System.out.println(ignore.getMessage());
+//            throw new RuntimeException(e);
         }
     }
 
@@ -140,7 +138,7 @@ public class AdminDashboardController implements Initializable {
                 System.out.println("NOT created");
             }
         } catch (Exception ignore) {
-
+            System.out.println(ignore.getMessage());
         }
     }
 
@@ -156,7 +154,7 @@ public class AdminDashboardController implements Initializable {
                 stationListView.getItems().remove(selectedID);
             }
         } catch (Exception ignore) {
-
+            System.out.println(ignore.getMessage());
         }
     }
 
@@ -168,7 +166,6 @@ public class AdminDashboardController implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = selectedDate.format(formatter);
         String journeyTime = time.getValue();
-        System.out.println(fromText + " " + toText + " " + date + " " + journeyTime);
         String sql = "INSERT INTO trips(station_from, station_to, journey_date, journey_time) VALUES(?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
@@ -179,6 +176,22 @@ public class AdminDashboardController implements Initializable {
             int insertTrip = preparedStatement.executeUpdate();
             if (insertTrip > 0) {
                 tripList.add(new Trip(fromText, toText, date, journeyTime));
+            }
+        } catch (Exception ignore) {
+            System.out.println(ignore.getMessage());
+        }
+    }
+
+    @FXML
+    private void removeTrip() {
+        int selectedID = tripTable.getSelectionModel().getSelectedIndex();
+        String trip_id = String.valueOf(tripList.get(selectedID).getTrip_id());
+        String sql = "DELETE FROM trips WHERE trip_id = '" + trip_id + "'";
+        try {
+            PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
+            int isDeleteTrip = preparedStatement.executeUpdate();
+            if (isDeleteTrip > 0) {
+                tripList.remove(selectedID);
             }
         } catch (Exception ignore) {
             System.out.println(ignore.getMessage());

@@ -113,7 +113,7 @@
                                           <TableColumn fx:id="timeColumn" editable="false" prefWidth="73.0" text="Time" />
                                       </columns>
                                     </TableView>
-                                    <Button layoutX="386.0" layoutY="530.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="95.0" text="DELETE">
+                                    <Button layoutX="386.0" layoutY="530.0" mnemonicParsing="false" onAction="#removeTrip" prefHeight="27.0" prefWidth="95.0" text="DELETE">
                                        <padding>
                                           <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                                        </padding>

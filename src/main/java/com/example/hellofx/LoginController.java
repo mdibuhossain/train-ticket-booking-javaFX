@@ -98,7 +98,10 @@ public class LoginController implements Initializable {
                 alert.showAndWait();
                 Platform.setImplicitExit(false);
                 if (checkUser.get(0).getRole().equals("admin")) Login.openAdminDashboard();
-                else Login.openDashboard();
+                else {
+                    User tmpUser = new User(checkUser.get(0));
+                    Login.openDashboard(tmpUser);
+                }
             } else {
                 alert.setContentText("Invalid username and password!");
                 alert.showAndWait();

@@ -84,9 +84,12 @@ public class User {
         this.password = password;
     }
 
+    public String getPassword() {
+        return password;
+    }
 
     @Override
     public String toString() {
-        return role + " " + full_name + " " + email + " " + password;
+        return role + " " + full_name + " " + email + " " + password + " " + phone_number + " " + address + " " + user_id;
     }
 }

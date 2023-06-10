@@ -1,5 +1,6 @@
 package com.example.hellofx;
 
+import com.example.hellofx.models.User;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -36,9 +37,13 @@ public class Login extends Application {
         primaryStage.setOnCloseRequest(windowEvent -> Platform.exit());
     }
 
-    public static void openDashboard() {
+    public static void openDashboard(User tmpUser) {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(Login.class.getResource("ticket_counter.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Login.class.getResource("ticket_counter.fxml")));
+//            Parent root = FXMLLoader.load(Objects.requireNonNull(Login.class.getResource("ticket_counter.fxml")));
+            Parent root = loader.load();
+            TicketCounterController ticketCounterController = loader.getController();
+            ticketCounterController.setUser(tmpUser);
             Stage dashboardStage = new Stage();
             dashboardStage.setTitle("Dashboard");
             dashboardStage.setScene(new Scene(root));
@@ -48,6 +53,7 @@ public class Login extends Application {
                 primaryStage.show();
             });
         } catch (IOException ignore) {
+            System.out.println(ignore.getMessage());
         }
     }
 
@@ -65,6 +71,4 @@ public class Login extends Application {
         } catch (IOException ignore) {
         }
     }
-
-
 }
