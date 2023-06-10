@@ -57,10 +57,11 @@ public class TicketCounterController implements Initializable {
     private Text booked_to;
     @FXML
     private Text booked_phoneNumber;
+    private int booked_trip_id;
     private ObservableList<Trip> tripList;
     private List<Station> stations;
-    private Set<Integer> selectedSeats = new TreeSet<>();
     private User user = new User();
+    Set<Integer> selectedSeats = new TreeSet<>();
 
 
     @Override
@@ -170,30 +171,34 @@ public class TicketCounterController implements Initializable {
         String to = tripList.get(selectedID).getTo();
         String date = tripList.get(selectedID).getDate();
         String time = tripList.get(selectedID).getTime();
-        initSeats(tripList.get(selectedID).getTrip_id());
+        booked_trip_id = tripList.get(selectedID).getTrip_id();
+        initSeats();
         initBookingInfo(from, to, date, time);
     }
 
-    private void initSeats(int trip_id) {
-        String sql = "SELECT * FROM booking WHERE trip_id='" + trip_id + "'";
+    private void initSeats() {
+        seatGrid.getChildren().clear();
+        selectedSeats.clear();
+        String sql = "SELECT * FROM booking WHERE trip_id='" + booked_trip_id + "'";
         try {
             ResultSet resultSet = DBController.statement.executeQuery(sql);
-            Set<Integer> bookedSeats = new TreeSet<>(RowMapper.seatMapper(resultSet));
+            Set<Integer> bookedSeatList = new TreeSet<>(RowMapper.seatMapper(resultSet));
             int cnt = 1;
             for (int i = 1; i <= 10; i++) {
                 for (int j = 1; j <= 6; j++) {
                     if (j == 3) continue;
                     Button seat = new Button();
-                    seat.setText(Integer.toString(cnt++));
+                    seat.setText(Integer.toString(cnt));
                     seat.setPrefSize(30, 30);
-                    if (bookedSeats.contains(cnt)) {
-//                    seat.setStyle("-fx-background-color: red;");
+                    if (bookedSeatList.contains(cnt)) {
+                        seat.setStyle("-fx-background-color: #e8e8e8;");
                         seat.setDisable(true);
                     } else seat.setStyle("-fx-background-color: lime;");
                     GridPane.setConstraints(seat, j - 1, i - 1);
                     GridPane.setHalignment(seat, HPos.CENTER);
                     GridPane.setValignment(seat, VPos.CENTER);
                     seatGrid.getChildren().add(seat);
+                    cnt++;
                 }
             }
             for (Node node : seatGrid.getChildren()) {
@@ -207,11 +212,40 @@ public class TicketCounterController implements Initializable {
                             System.out.println(selectedSeats.toString());
                             button.setStyle("-fx-background-color: #fc99ff;");
                         }
+                        StringBuilder dispSeat = new StringBuilder();
+                        for (int seat : selectedSeats) {
+                            dispSeat.append(seat).append(", ");
+                        }
+                        if (dispSeat.length() > 1)
+                            dispSeat = new StringBuilder(dispSeat.substring(0, dispSeat.length() - 2));
+                        booked_seats.setText(dispSeat.toString());
                     });
                 }
             }
         } catch (Exception ignore) {
             System.out.println(ignore.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleSeatBookAction() {
+        int isInsertTrip = 0;
+        for (int seat : selectedSeats) {
+            String sql = "INSERT INTO booking(user_id, trip_id, seat_number, booking_time) VALUES(?, ?, ?, ?)";
+            try {
+                PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
+                preparedStatement.setInt(1, user.getUser_id());
+                preparedStatement.setInt(2, booked_trip_id);
+                preparedStatement.setInt(3, seat);
+                preparedStatement.setString(4, String.valueOf(new Date()));
+                isInsertTrip = preparedStatement.executeUpdate();
+            } catch (Exception ignore) {
+                System.out.println(ignore.getMessage());
+                break;
+            }
+        }
+        if (isInsertTrip > 0) {
+            initSeats();
         }
     }
 }

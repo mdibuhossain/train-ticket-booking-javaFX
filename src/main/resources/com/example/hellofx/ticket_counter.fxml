@@ -220,6 +220,18 @@
                         </HBox>
                      </children>
                   </GridPane>
+                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="33.0" layoutY="527.0" mnemonicParsing="false" onAction="#handleSeatBookAction" prefHeight="25.0" prefWidth="75.0" style="-fx-background-radius: 330; -fx-background-color: limegreen;" text="Book" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Caskaydia Cove Nerd Font Complete Mono Windows Compatible" size="13.0" />
+                     </font>
+                     <effect>
+                        <DropShadow height="6.0" offsetX="2.0" offsetY="2.0" radius="2.5" spread="0.06" width="6.0">
+                           <color>
+                              <Color opacity="0.3015267252922058" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </Button>
                </children>
             </AnchorPane>
          </content>
