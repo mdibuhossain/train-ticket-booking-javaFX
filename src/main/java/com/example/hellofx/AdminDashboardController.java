@@ -1,6 +1,7 @@
 package com.example.hellofx;
 
 import com.example.hellofx.models.Station;
+import com.example.hellofx.models.Train;
 import com.example.hellofx.models.Trip;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
 import java.net.URL;
@@ -25,9 +27,13 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private ListView<String> stationListView;
     @FXML
+    private ListView<String> trainListView;
+    @FXML
     private ComboBox<String> dropDownFrom;
     @FXML
     private ComboBox<String> dropDownTo;
+    @FXML
+    private ComboBox<String> dropDownTrain;
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -39,17 +45,23 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private TableColumn<Trip, String> toColumn;
     @FXML
+    private TableColumn<Trip, String> toTrain;
+    @FXML
     private TableColumn<Trip, String> dateColumn;
     @FXML
     private TableColumn<Trip, String> timeColumn;
+    @FXML
+    private TextField trainNameField;
     private ObservableList<Trip> tripList;
     private List<Station> stations;
+    private List<Train> trains;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initStation();
         initTripTable();
+        initTrain();
         initDepartureTime();
         formatDatePicker();
 
@@ -58,6 +70,7 @@ public class AdminDashboardController implements Initializable {
     private void initTripTable() {
         fromColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("from"));
         toColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("to"));
+        toTrain.setCellValueFactory(new PropertyValueFactory<Trip, String>("train"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("date"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("time"));
         fetchTripTableData();
@@ -102,6 +115,81 @@ public class AdminDashboardController implements Initializable {
             }
         };
         datePicker.setConverter(converter);
+    }
+
+    @FXML
+    private void initTrain() {
+        String trainSQL = "SELECT * FROM trains ORDER BY train_name ASC";
+        try {
+            ResultSet resultSet = DBController.statement.executeQuery(trainSQL);
+            trains = RowMapper.trainMapper(resultSet);
+            dropDownTrain.getItems().clear();
+            trainListView.getItems().clear();
+            for (Train train : trains) {
+                dropDownTrain.getItems().add(train.getTrain_name());
+                trainListView.getItems().add(train.getTrain_name());
+            }
+        } catch (SQLException ignore) {
+
+        }
+    }
+
+    @FXML
+    private void addTrain() {
+        String trainName = trainNameField.getText();
+        String sql = "INSERT INTO trains(train_name) VALUE('" + trainName + "')";
+        try {
+            PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
+            int createTrain = preparedStatement.executeUpdate();
+            if (createTrain > 0) {
+                initTrain();
+                stationNameField.setText("");
+            } else {
+                System.out.println("NOT created");
+            }
+        } catch (SQLException ignore) {
+
+        }
+    }
+
+    @FXML
+    private void deleteTrain() {
+        int selectedTrainID = trainListView.getSelectionModel().getSelectedIndex();
+        String selectedTrain = trainListView.getItems().get(selectedTrainID);
+        String sql = String.format("DELETE FROM trains WHERE train_name='%s'", selectedTrain);
+        try {
+            PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
+            int isTrainDeleted = preparedStatement.executeUpdate();
+            if (isTrainDeleted > 0) {
+                trainListView.getItems().remove(selectedTrainID);
+            }
+        } catch (SQLException ignore) {
+
+        }
+    }
+
+    @FXML
+    void handleTrainClick(MouseEvent event) {
+        String selectedItem = trainListView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            trainNameField.setText(selectedItem);
+        }
+    }
+
+    @FXML
+    private void updateTrain() {
+        int selectedTrainID = trainListView.getSelectionModel().getSelectedIndex();
+        String selectedTrain = trainListView.getItems().get(selectedTrainID);
+        String sql = String.format("UPDATE trains SET train_name='%s' WHERE train_name='%s'", trainNameField.getText(), selectedTrain);
+        try {
+            PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
+            int isTrainUpdated = preparedStatement.executeUpdate();
+            if (isTrainUpdated > 0) {
+                trainListView.getItems().set(selectedTrainID, trainNameField.getText());
+            }
+        } catch (SQLException ignore) {
+
+        }
     }
 
     @FXML
@@ -162,20 +250,22 @@ public class AdminDashboardController implements Initializable {
     private void addTrip() {
         String fromText = dropDownFrom.getValue();
         String toText = dropDownTo.getValue();
+        String selectedTrain = dropDownTrain.getValue();
         LocalDate selectedDate = datePicker.getValue();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = selectedDate.format(formatter);
         String journeyTime = time.getValue();
-        String sql = "INSERT INTO trips(station_from, station_to, journey_date, journey_time) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO trips(station_from, station_to, train_name, journey_date, journey_time) VALUES(?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
             preparedStatement.setString(1, fromText);
             preparedStatement.setString(2, toText);
-            preparedStatement.setString(3, date);
-            preparedStatement.setString(4, journeyTime);
+            preparedStatement.setString(3, selectedTrain);
+            preparedStatement.setString(4, date);
+            preparedStatement.setString(5, journeyTime);
             int insertTrip = preparedStatement.executeUpdate();
             if (insertTrip > 0) {
-                tripList.add(new Trip(fromText, toText, date, journeyTime));
+                tripList.add(new Trip(fromText, toText, selectedTrain, date, journeyTime));
             }
         } catch (Exception ignore) {
             System.out.println(ignore.getMessage());
@@ -192,6 +282,48 @@ public class AdminDashboardController implements Initializable {
             int isDeleteTrip = preparedStatement.executeUpdate();
             if (isDeleteTrip > 0) {
                 tripList.remove(selectedID);
+            }
+        } catch (Exception ignore) {
+            System.out.println(ignore.getMessage());
+        }
+    }
+
+    @FXML
+    void handleTripClick(MouseEvent event) {
+        int selectedID = tripTable.getSelectionModel().getSelectedIndex();
+        if (tripTable.getSelectionModel().getSelectedItem() != null) {
+            String trip_id = String.valueOf(tripList.get(selectedID).getTrip_id());
+            dropDownTrain.setValue(tripList.get(selectedID).getTrain());
+            dropDownFrom.setValue(tripList.get(selectedID).getFrom());
+            dropDownTo.setValue(tripList.get(selectedID).getTo());
+            datePicker.setValue(LocalDate.parse(tripList.get(selectedID).getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            time.setValue(tripList.get(selectedID).getTime());
+        }
+    }
+
+    @FXML
+    private void updateTrip() {
+        int selectedID = tripTable.getSelectionModel().getSelectedIndex();
+        String trip_id = String.valueOf(tripList.get(selectedID).getTrip_id());
+        String fromText = dropDownFrom.getValue();
+        String toText = dropDownTo.getValue();
+        String selectedTrain = dropDownTrain.getValue();
+        LocalDate selectedDate = datePicker.getValue();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String date = selectedDate.format(formatter);
+        String journeyTime = time.getValue();
+        String sql = "UPDATE trips SET station_from=?, station_to=?, train_name=?, journey_date=?, journey_time=? WHERE trip_id=?";
+        try {
+            PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
+            preparedStatement.setString(1, fromText);
+            preparedStatement.setString(2, toText);
+            preparedStatement.setString(3, selectedTrain);
+            preparedStatement.setString(4, date);
+            preparedStatement.setString(5, journeyTime);
+            preparedStatement.setString(6, trip_id);
+            int isTripUpdated = preparedStatement.executeUpdate();
+            if (isTripUpdated > 0) {
+                tripList.set(selectedID, new Trip(Integer.parseInt(trip_id), fromText, toText, selectedTrain, date, journeyTime));
             }
         } catch (Exception ignore) {
             System.out.println(ignore.getMessage());

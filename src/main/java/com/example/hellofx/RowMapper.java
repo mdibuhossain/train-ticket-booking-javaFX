@@ -1,9 +1,6 @@
 package com.example.hellofx;
 
-import com.example.hellofx.models.Booking;
-import com.example.hellofx.models.Station;
-import com.example.hellofx.models.Trip;
-import com.example.hellofx.models.User;
+import com.example.hellofx.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,11 +33,30 @@ public class RowMapper {
         }
     }
 
+    public static List<Train> trainMapper(ResultSet resultSet) {
+        List<Train> trains = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                trains.add(new Train(
+                        resultSet.getInt("train_id"),
+                        resultSet.getString("train_name")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return trains;
+    }
+
     public static List<Station> stationMapper(ResultSet resultSet) {
         List<Station> stations = new ArrayList<>();
         try {
             while (resultSet.next()) {
-                stations.add(new Station(resultSet.getInt("station_id"), resultSet.getString("station_name")));
+                stations.add(new Station(
+                        resultSet.getInt("station_id"),
+                        resultSet.getString("station_name"
+                        )
+                ));
             }
         } catch (SQLException ignore) {
             System.out.println("Something went wrong!");
@@ -56,6 +72,7 @@ public class RowMapper {
                                 resultSet.getInt("trip_id"),
                                 resultSet.getString("station_from"),
                                 resultSet.getString("station_to"),
+                                resultSet.getString("train_name"),
                                 resultSet.getString("journey_date"),
                                 resultSet.getString("journey_time")
                         )

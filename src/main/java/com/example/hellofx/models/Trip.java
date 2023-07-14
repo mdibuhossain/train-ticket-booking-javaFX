@@ -6,31 +6,44 @@ public class Trip {
     private String to;
     private String date;
     private String time;
+    private String train;
 
     public Trip() {
     }
 
-    public Trip(int trip_id, String from, String to, String date, String time) {
+    public Trip(int trip_id, String from, String to, String train, String date, String time) {
         this.trip_id = trip_id;
         this.from = from;
         this.to = to;
+        this.train = train;
         this.date = date;
         this.time = time;
     }
 
-    public Trip(String from, String to, String date, String time) {
+    public Trip(String from, String to, String train, String date, String time) {
         this.from = from;
         this.to = to;
+        this.train = train;
         this.date = date;
         this.time = time;
     }
+
 
     public Trip(Trip tmpTrip) {
         this.trip_id = tmpTrip.trip_id;
         this.from = tmpTrip.from;
         this.to = tmpTrip.to;
+        this.train = tmpTrip.train;
         this.date = tmpTrip.date;
         this.time = tmpTrip.time;
+    }
+
+    public String getTrain() {
+        return train;
+    }
+
+    public void setTrain(String train) {
+        this.train = train;
     }
 
     public int getTrip_id() {

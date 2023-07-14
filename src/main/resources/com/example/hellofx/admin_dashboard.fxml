@@ -27,7 +27,7 @@
                <children>
                   <TabPane prefHeight="760.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                      <Tab text="Station">
+                      <Tab text="Stations">
                            <content>
                               <ScrollPane prefHeight="200.0" prefWidth="200.0">
                                 <content>
@@ -88,7 +88,7 @@
                               </AnchorPane>
                            </content>
                       </Tab>
-                      <Tab text="Trip">
+                      <Tab text="Schedule">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
@@ -97,7 +97,7 @@
                                           <Font name="Oswald Medium" size="48.0" />
                                        </font>
                                     </Text>
-                                    <Button layoutX="72.0" layoutY="429.0" mnemonicParsing="false" onAction="#addTrip" prefHeight="27.0" prefWidth="95.0" text="ADD">
+                                    <Button layoutX="78.0" layoutY="484.0" mnemonicParsing="false" onAction="#addTrip" prefHeight="27.0" prefWidth="95.0" text="ADD">
                                        <padding>
                                           <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                                        </padding>
@@ -105,12 +105,13 @@
                                           <Font name="Calibri" size="14.0" />
                                        </font>
                                     </Button>
-                                    <TableView fx:id="tripTable" focusTraversable="false" layoutX="386.0" layoutY="139.0" prefHeight="372.0" prefWidth="551.0">
+                                    <TableView fx:id="tripTable" focusTraversable="false" layoutX="386.0" layoutY="139.0" onMouseClicked="#handleTripClick" prefHeight="372.0" prefWidth="551.0">
                                       <columns>
-                                        <TableColumn fx:id="fromColumn" editable="false" prefWidth="173.0" sortable="false" text="From" />
-                                          <TableColumn fx:id="toColumn" editable="false" prefWidth="155.0" sortable="false" text="To" />
-                                          <TableColumn fx:id="dateColumn" editable="false" prefWidth="130.0" text="Date" />
-                                          <TableColumn fx:id="timeColumn" editable="false" prefWidth="73.0" text="Time" />
+                                        <TableColumn fx:id="fromColumn" editable="false" prefWidth="134.0" sortable="false" text="From" />
+                                          <TableColumn fx:id="toColumn" editable="false" prefWidth="128.0" sortable="false" text="To" />
+                                          <TableColumn fx:id="toTrain" prefWidth="101.0" text="Train" />
+                                          <TableColumn fx:id="dateColumn" editable="false" prefWidth="105.0" text="Date" />
+                                          <TableColumn fx:id="timeColumn" editable="false" text="Time" />
                                       </columns>
                                     </TableView>
                                     <Button layoutX="386.0" layoutY="530.0" mnemonicParsing="false" onAction="#removeTrip" prefHeight="27.0" prefWidth="95.0" text="DELETE">
@@ -129,7 +130,7 @@
                                           <Font name="Calibri" size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="183.0" layoutY="429.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="95.0" text="UPDATE">
+                                    <Button layoutX="193.0" layoutY="484.0" mnemonicParsing="false" onAction="#updateTrip" prefHeight="27.0" prefWidth="95.0" text="UPDATE">
                                        <padding>
                                           <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                                        </padding>
@@ -137,11 +138,13 @@
                                           <Font name="Calibri" size="14.0" />
                                        </font>
                                     </Button>
-                                    <GridPane layoutX="72.0" layoutY="139.0" prefHeight="271.0" prefWidth="222.0">
+                                    <GridPane layoutX="78.0" layoutY="167.0" prefHeight="300.0" prefWidth="210.0">
                                       <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
                                       <rowConstraints>
+                                          <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints maxHeight="76.0" minHeight="6.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints maxHeight="108.0" minHeight="0.0" prefHeight="28.0" vgrow="SOMETIMES" />
                                           <RowConstraints maxHeight="118.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
@@ -152,20 +155,76 @@
                                           <RowConstraints maxHeight="292.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <ComboBox fx:id="dropDownFrom" prefHeight="47.0" prefWidth="222.0" promptText="From" GridPane.rowIndex="1" />
-                                          <ComboBox fx:id="dropDownTo" prefHeight="51.0" prefWidth="222.0" promptText="To" GridPane.rowIndex="3" />
-                                          <DatePicker fx:id="datePicker" prefHeight="41.0" prefWidth="222.0" GridPane.rowIndex="5" />
-                                          <ComboBox fx:id="time" prefHeight="29.0" prefWidth="222.0" promptText="Departure Time" GridPane.rowIndex="7" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="From" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To" GridPane.rowIndex="2" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date of journey" GridPane.rowIndex="4" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Departure time" GridPane.rowIndex="6" />
+                                          <ComboBox fx:id="dropDownFrom" prefHeight="47.0" prefWidth="222.0" promptText="From" GridPane.rowIndex="3" />
+                                          <ComboBox fx:id="dropDownTo" prefHeight="51.0" prefWidth="222.0" promptText="To" GridPane.rowIndex="5" />
+                                          <DatePicker fx:id="datePicker" prefHeight="41.0" prefWidth="222.0" GridPane.rowIndex="7" />
+                                          <ComboBox fx:id="time" prefHeight="29.0" prefWidth="222.0" promptText="Departure Time" GridPane.rowIndex="9" />
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="From" GridPane.rowIndex="2" />
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To" GridPane.rowIndex="4" />
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date of journey" GridPane.rowIndex="6" />
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Departure time" GridPane.rowIndex="8" />
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Train Name" />
+                                          <ComboBox fx:id="dropDownTrain" prefHeight="47.0" prefWidth="222.0" promptText="Train" GridPane.rowIndex="1" />
                                        </children>
                                     </GridPane>
                                  </children>
                               </AnchorPane>
                         </content>
                       </Tab>
+                        <Tab text="Trains">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <TextField fx:id="trainNameField" layoutX="54.0" layoutY="132.0" promptText="Train name">
+                                       <font>
+                                          <Font name="Calibri Italic" size="18.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </TextField>
+                                    <Button layoutX="54.0" layoutY="188.0" mnemonicParsing="false" onAction="#addTrain" prefHeight="27.0" prefWidth="95.0" text="ADD">
+                                       <padding>
+                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Calibri" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Text layoutX="328.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Train management" textAlignment="CENTER" underline="true">
+                                       <font>
+                                          <Font name="Oswald Medium" size="48.0" />
+                                       </font>
+                                    </Text>
+                                    <ListView fx:id="trainListView" focusTraversable="false" layoutX="522.0" layoutY="132.0" onMouseClicked="#handleTrainClick" prefHeight="428.0" prefWidth="342.0" />
+                                    <Button layoutX="522.0" layoutY="578.0" mnemonicParsing="false" onAction="#deleteTrain" prefHeight="27.0" prefWidth="95.0" text="DELETE">
+                                       <padding>
+                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Calibri" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button layoutX="54.0" layoutY="232.0" mnemonicParsing="false" onAction="#initTrain" prefHeight="27.0" prefWidth="95.0" text="REFRESH">
+                                       <padding>
+                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Calibri" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button layoutX="54.0" layoutY="274.0" mnemonicParsing="false" onAction="#updateTrain" prefHeight="27.0" prefWidth="95.0" text="UPDATE">
+                                       <padding>
+                                          <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Calibri" size="14.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
                     </tabs>
                   </TabPane>
                </children>
