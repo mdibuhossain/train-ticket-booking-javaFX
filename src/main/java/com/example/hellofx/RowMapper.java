@@ -73,6 +73,7 @@ public class RowMapper {
                                 resultSet.getString("station_from"),
                                 resultSet.getString("station_to"),
                                 resultSet.getString("train_name"),
+                                resultSet.getInt("available_seats"),
                                 resultSet.getString("journey_date"),
                                 resultSet.getString("journey_time")
                         )

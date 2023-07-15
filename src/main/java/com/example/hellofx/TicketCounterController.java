@@ -40,9 +40,15 @@ public class TicketCounterController implements Initializable {
     @FXML
     private TableColumn<Trip, String> toColumn;
     @FXML
+    private TableColumn<Trip, String> trainColumn;
+    @FXML
+    private TableColumn<Trip, Integer> seatColumn;
+    @FXML
     private TableColumn<Trip, String> dateColumn;
     @FXML
     private TableColumn<Trip, String> timeColumn;
+    @FXML
+    private Text booked_train;
     @FXML
     private Text booked_date;
     @FXML
@@ -86,6 +92,8 @@ public class TicketCounterController implements Initializable {
     private void initTripTable() {
         fromColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("from"));
         toColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("to"));
+        trainColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("train"));
+        seatColumn.setCellValueFactory(new PropertyValueFactory<Trip, Integer>("available_seats"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("date"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("time"));
     }
@@ -155,8 +163,9 @@ public class TicketCounterController implements Initializable {
         fetchTripTableData(fromText, toText, date);
     }
 
-    private void initBookingInfo(String from, String to, String date, String time) {
+    private void initBookingInfo(String from, String to, String train, String date, String time) {
         booked_name.setText(user.getFull_name());
+        booked_train.setText(train);
         booked_from.setText(from);
         booked_to.setText(to);
         booked_date.setText(date);
@@ -167,13 +176,16 @@ public class TicketCounterController implements Initializable {
     @FXML
     private void tripSeatFetch() {
         int selectedID = tripTable.getSelectionModel().getSelectedIndex();
-        String from = tripList.get(selectedID).getFrom();
-        String to = tripList.get(selectedID).getTo();
-        String date = tripList.get(selectedID).getDate();
-        String time = tripList.get(selectedID).getTime();
-        booked_trip_id = tripList.get(selectedID).getTrip_id();
-        initSeats();
-        initBookingInfo(from, to, date, time);
+        if (tripTable.getSelectionModel().getSelectedItem() != null) {
+            String from = tripList.get(selectedID).getFrom();
+            String to = tripList.get(selectedID).getTo();
+            String date = tripList.get(selectedID).getDate();
+            String time = tripList.get(selectedID).getTime();
+            String train = tripList.get(selectedID).getTrain();
+            booked_trip_id = tripList.get(selectedID).getTrip_id();
+            initSeats();
+            initBookingInfo(from, to, train, date, time);
+        }
     }
 
     private void initSeats() {
@@ -245,6 +257,23 @@ public class TicketCounterController implements Initializable {
             }
         }
         if (isInsertTrip > 0) {
+            if (selectedSeats.size() > 0) {
+                int selectTripID = tripTable.getSelectionModel().getSelectedIndex();
+                int beforeSeats = tripList.get(selectTripID).getAvailable_seats();
+                String updateSQL = "UPDATE trips SET available_seats=? WHERE trip_id=?";
+                try {
+                    PreparedStatement preparedStatement = DBController.connection.prepareStatement(updateSQL);
+                    preparedStatement.setInt(1, (beforeSeats - selectedSeats.size()));
+                    preparedStatement.setInt(2, booked_trip_id);
+                    int isTripUpdated = preparedStatement.executeUpdate();
+                    if (isTripUpdated > 0) {
+                        searchTrip();
+                        tripTable.getSelectionModel().getSelectedItem().setAvailable_seats(beforeSeats - selectedSeats.size());
+                    }
+                } catch (Exception ignore) {
+
+                }
+            }
             initSeats();
         }
     }

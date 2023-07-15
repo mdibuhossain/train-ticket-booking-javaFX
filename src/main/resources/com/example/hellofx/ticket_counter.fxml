@@ -64,10 +64,12 @@
                   </VBox>
                   <TableView fx:id="tripTable" focusTraversable="false" layoutX="33.0" layoutY="31.0" onMouseClicked="#tripSeatFetch" prefHeight="260.0" prefWidth="642.0">
                     <columns>
-                      <TableColumn fx:id="fromColumn" editable="false" prefWidth="221.0" sortable="false" text="From" />
-                        <TableColumn fx:id="toColumn" editable="false" prefWidth="194.0" sortable="false" text="To" />
-                        <TableColumn fx:id="dateColumn" editable="false" minWidth="0.0" prefWidth="135.0" sortable="false" text="Date" />
-                        <TableColumn fx:id="timeColumn" minWidth="0.0" prefWidth="78.0" text="Time" />
+                      <TableColumn fx:id="fromColumn" editable="false" prefWidth="118.0" sortable="false" text="From" />
+                        <TableColumn fx:id="toColumn" editable="false" prefWidth="118.0" sortable="false" text="To" />
+                        <TableColumn fx:id="trainColumn" editable="false" prefWidth="104.0" sortable="false" text="Train" />
+                        <TableColumn fx:id="seatColumn" editable="false" prefWidth="109.0" sortable="false" text="Available Seat" />
+                        <TableColumn fx:id="dateColumn" editable="false" minWidth="0.0" prefWidth="105.0" sortable="false" text="Date" />
+                        <TableColumn fx:id="timeColumn" minWidth="0.0" prefWidth="96.0" text="Time" />
                     </columns>
                   </TableView>
                   <GridPane layoutX="33.0" layoutY="342.0" prefHeight="172.0" prefWidth="402.0" vgap="10.0">
@@ -77,6 +79,7 @@
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -90,27 +93,37 @@
                               <Font name="Lucida Console" size="14.0" />
                            </font>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Seats" GridPane.rowIndex="1">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Train" GridPane.rowIndex="1">
                            <font>
                               <Font name="Lucida Console" size="14.0" />
                            </font>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="From" GridPane.rowIndex="2">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Seats" GridPane.rowIndex="2">
                            <font>
                               <Font name="Lucida Console" size="14.0" />
                            </font>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="To" GridPane.rowIndex="3">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="From" GridPane.rowIndex="3">
                            <font>
                               <Font name="Lucida Console" size="14.0" />
                            </font>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Date of journey" GridPane.rowIndex="4">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="To" GridPane.rowIndex="4">
                            <font>
                               <Font name="Lucida Console" size="14.0" />
                            </font>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Departure time" GridPane.rowIndex="5">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Date of journey" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="Lucida Console" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Departure time" GridPane.rowIndex="6">
+                           <font>
+                              <Font name="Lucida Console" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Mobile number" GridPane.rowIndex="7">
                            <font>
                               <Font name="Lucida Console" size="14.0" />
                            </font>
@@ -129,14 +142,14 @@
                               </Text>
                            </children>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                              <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text=": ">
                                  <font>
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="booked_seats" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
+                              <Text fx:id="booked_train" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <font>
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
@@ -150,7 +163,7 @@
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="booked_from" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
+                              <Text fx:id="booked_seats" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <font>
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
@@ -164,7 +177,7 @@
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="booked_to" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
+                              <Text fx:id="booked_from" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <font>
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
@@ -178,7 +191,7 @@
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="booked_date" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
+                              <Text fx:id="booked_to" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <font>
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
@@ -192,6 +205,20 @@
                                     <Font name="Lucida Console" size="14.0" />
                                  </font>
                               </Text>
+                              <Text fx:id="booked_date" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
+                                 <font>
+                                    <Font name="Lucida Console" size="14.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                           <children>
+                              <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                                 <font>
+                                    <Font name="Lucida Console" size="14.0" />
+                                 </font>
+                              </Text>
                               <Text fx:id="booked_time" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <font>
                                     <Font name="Lucida Console" size="14.0" />
@@ -199,12 +226,7 @@
                               </Text>
                            </children>
                         </HBox>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Mobile number" GridPane.rowIndex="6">
-                           <font>
-                              <Font name="Lucida Console" size="14.0" />
-                           </font>
-                        </Text>
-                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                            <children>
                               <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
                                  <font>
@@ -220,7 +242,7 @@
                         </HBox>
                      </children>
                   </GridPane>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="33.0" layoutY="527.0" mnemonicParsing="false" onAction="#handleSeatBookAction" prefHeight="25.0" prefWidth="75.0" style="-fx-background-radius: 330; -fx-background-color: limegreen;" text="Book" textAlignment="CENTER" textFill="WHITE">
+                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="33.0" layoutY="551.0" mnemonicParsing="false" onAction="#handleSeatBookAction" prefHeight="25.0" prefWidth="75.0" style="-fx-background-radius: 330; -fx-background-color: limegreen;" text="Book" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="Caskaydia Cove Nerd Font Complete Mono Windows Compatible" size="13.0" />
                      </font>

@@ -45,7 +45,9 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private TableColumn<Trip, String> toColumn;
     @FXML
-    private TableColumn<Trip, String> toTrain;
+    private TableColumn<Trip, Integer> seatColumn;
+    @FXML
+    private TableColumn<Trip, String> trainColumn;
     @FXML
     private TableColumn<Trip, String> dateColumn;
     @FXML
@@ -70,7 +72,8 @@ public class AdminDashboardController implements Initializable {
     private void initTripTable() {
         fromColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("from"));
         toColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("to"));
-        toTrain.setCellValueFactory(new PropertyValueFactory<Trip, String>("train"));
+        trainColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("train"));
+        seatColumn.setCellValueFactory(new PropertyValueFactory<Trip, Integer>("available_seats"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("date"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<Trip, String>("time"));
         fetchTripTableData();
@@ -247,6 +250,32 @@ public class AdminDashboardController implements Initializable {
     }
 
     @FXML
+    void handleStationClick(MouseEvent event) {
+        int selectedID = stationListView.getSelectionModel().getSelectedIndex();
+        if (stationListView.getSelectionModel().getSelectedItem() != null) {
+            stationNameField.setText(stationListView.getItems().get(selectedID));
+            System.out.println(stationNameField.getText());
+        }
+    }
+
+    @FXML
+    private void updateStation() {
+        int selectedStationID = stationListView.getSelectionModel().getSelectedIndex();
+        String selectedStation = stationListView.getItems().get(selectedStationID);
+        String sql = String.format("UPDATE stations SET station_name='%s' WHERE station_name='%s'", stationNameField.getText(), selectedStation);
+        try {
+            PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
+            int isStationUpdated = preparedStatement.executeUpdate();
+            if (isStationUpdated > 0) {
+                stationListView.getItems().set(selectedStationID, stationNameField.getText());
+            }
+        } catch (SQLException ignore) {
+
+        }
+    }
+
+
+    @FXML
     private void addTrip() {
         String fromText = dropDownFrom.getValue();
         String toText = dropDownTo.getValue();
@@ -308,6 +337,7 @@ public class AdminDashboardController implements Initializable {
         String fromText = dropDownFrom.getValue();
         String toText = dropDownTo.getValue();
         String selectedTrain = dropDownTrain.getValue();
+        int remainingSeats = tripList.get(selectedID).getAvailable_seats();
         LocalDate selectedDate = datePicker.getValue();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = selectedDate.format(formatter);
@@ -323,7 +353,7 @@ public class AdminDashboardController implements Initializable {
             preparedStatement.setString(6, trip_id);
             int isTripUpdated = preparedStatement.executeUpdate();
             if (isTripUpdated > 0) {
-                tripList.set(selectedID, new Trip(Integer.parseInt(trip_id), fromText, toText, selectedTrain, date, journeyTime));
+                tripList.set(selectedID, new Trip(Integer.parseInt(trip_id), fromText, toText, selectedTrain, remainingSeats, date, journeyTime));
             }
         } catch (Exception ignore) {
             System.out.println(ignore.getMessage());
