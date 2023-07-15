@@ -16,35 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `trips`
+-- Table structure for table `trains`
 --
 
-DROP TABLE IF EXISTS `trips`;
+DROP TABLE IF EXISTS `trains`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `trips` (
-  `trip_id` int NOT NULL AUTO_INCREMENT,
-  `station_from` varchar(100) NOT NULL,
-  `station_to` varchar(100) NOT NULL,
-  `train_name` varchar(50) DEFAULT NULL,
-  `available_seats` int NOT NULL DEFAULT '50',
-  `journey_date` varchar(15) NOT NULL,
-  `journey_time` varchar(15) NOT NULL,
-  PRIMARY KEY (`trip_id`),
-  KEY `trips_ibfk_1_idx` (`station_from`),
-  KEY `trips_ibfk_2` (`station_to`),
-  CONSTRAINT `trips_ibfk_1` FOREIGN KEY (`station_from`) REFERENCES `stations` (`station_name`),
-  CONSTRAINT `trips_ibfk_2` FOREIGN KEY (`station_to`) REFERENCES `stations` (`station_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `trains` (
+  `train_id` int NOT NULL AUTO_INCREMENT,
+  `train_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`train_id`),
+  UNIQUE KEY `train_name` (`train_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `trips`
+-- Dumping data for table `trains`
 --
 
-LOCK TABLES `trips` WRITE;
-/*!40000 ALTER TABLE `trips` DISABLE KEYS */;
-/*!40000 ALTER TABLE `trips` ENABLE KEYS */;
+LOCK TABLES `trains` WRITE;
+/*!40000 ALTER TABLE `trains` DISABLE KEYS */;
+/*!40000 ALTER TABLE `trains` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -56,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-15 17:31:09
+-- Dump completed on 2023-07-15 17:31:08
