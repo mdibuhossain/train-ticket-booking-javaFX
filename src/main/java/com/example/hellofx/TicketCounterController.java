@@ -68,6 +68,8 @@ public class TicketCounterController implements Initializable {
     private List<Station> stations;
     private User user = new User();
     Set<Integer> selectedSeats = new TreeSet<>();
+    Alert bookedConfirmation = new Alert(Alert.AlertType.INFORMATION);
+    int selectTripID = 0;
 
 
     @Override
@@ -171,6 +173,24 @@ public class TicketCounterController implements Initializable {
         booked_date.setText(date);
         booked_time.setText(time);
         booked_phoneNumber.setText(user.getPhone_number());
+        bookedConfirmation.setTitle("Receipt");
+        bookedConfirmation.setHeaderText("Seat booked successful");
+        bookedConfirmation.setContentText(String.format(
+                "%-15s %2s %-18s\n" +
+                        "%-15s %2s %-18s\n" +
+                        "%-15s %2s %-18s\n" +
+                        "%-15s %2s %-18s\n" +
+                        "%-15s %2s %-18s\n" +
+                        "%-15s %2s %-18s\n" +
+                        "%-15s %2s %-18s\n",
+                "Name", ":", "Muzahidul Islam",
+                "Train", ":", "Shuborna Express",
+                "From", ":", "Dhaka",
+                "To", ":", "Khulna",
+                "Date", ":", "1/1/2024",
+                "Time", ":", "9:45PM",
+                "Contact", ":", "01518455043"
+        ));
     }
 
     @FXML
@@ -258,8 +278,14 @@ public class TicketCounterController implements Initializable {
         }
         if (isInsertTrip > 0) {
             if (selectedSeats.size() > 0) {
-                int selectTripID = tripTable.getSelectionModel().getSelectedIndex();
+                if(tripTable.getSelectionModel().getSelectedIndex()>=0) {
+                    selectTripID = tripTable.getSelectionModel().getSelectedIndex();
+                }
+                System.out.println(selectTripID);
                 int beforeSeats = tripList.get(selectTripID).getAvailable_seats();
+                System.out.println(beforeSeats);
+                System.out.println(selectedSeats.size());
+
                 String updateSQL = "UPDATE trips SET available_seats=? WHERE trip_id=?";
                 try {
                     PreparedStatement preparedStatement = DBController.connection.prepareStatement(updateSQL);
@@ -268,10 +294,11 @@ public class TicketCounterController implements Initializable {
                     int isTripUpdated = preparedStatement.executeUpdate();
                     if (isTripUpdated > 0) {
                         searchTrip();
-                        tripTable.getSelectionModel().getSelectedItem().setAvailable_seats(beforeSeats - selectedSeats.size());
+//                        tripTable.getSelectionModel().getSelectedItem().setAvailable_seats(beforeSeats - selectedSeats.size());
                     }
+                    bookedConfirmation.showAndWait();
                 } catch (Exception ignore) {
-
+                    System.out.println(ignore.getMessage());
                 }
             }
             initSeats();

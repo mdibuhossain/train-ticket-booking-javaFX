@@ -16,7 +16,7 @@ public class DBController {
         try {
             String uri = "jdbc:mysql://localhost:3306/train_booking_system";
             String username = "root";
-            String password = "admin";
+            String password = "root";
             connection = DriverManager.getConnection(uri, username, password);
             statement = connection.createStatement();
         } catch (SQLException e) {
