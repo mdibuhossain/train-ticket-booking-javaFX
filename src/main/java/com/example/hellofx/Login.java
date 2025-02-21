@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.example.hellofx.DBController.getConnection;
+import static com.example.hellofx.DBController.initializeDatabase;
 
 public class Login extends Application {
 
@@ -20,7 +20,7 @@ public class Login extends Application {
     public static final int INIT_HEIGHT = 580;
 
     public static void main(String[] args) {
-        getConnection();
+        initializeDatabase();
         launch(args);
     }
 
