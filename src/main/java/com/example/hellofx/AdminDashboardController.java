@@ -140,6 +140,7 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private void addTrain() {
         String trainName = trainNameField.getText();
+        System.out.println(trainName);
         String sql = "INSERT INTO trains(train_name) VALUE('" + trainName + "')";
         try {
             PreparedStatement preparedStatement = DBController.connection.prepareStatement(sql);
@@ -151,7 +152,7 @@ public class AdminDashboardController implements Initializable {
                 System.out.println("NOT created");
             }
         } catch (SQLException ignore) {
-
+            ignore.printStackTrace();
         }
     }
 

@@ -1,53 +1,85 @@
-create database train_booking_system;
+create
+database train_booking_system;
 
-USE train_booking_system;
+USE
+train_booking_system;
 
-ALTER TABLE `train_booking_system`.`users` 
-ADD UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
-ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE;
-;
+-- Database: train_booking_system
 
-
-CREATE TABLE users (
-    user_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
-    full_name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL,
-    phone_number VARCHAR(20) NOT NULL,
-    address VARCHAR(200) NOT NULL,
-    role ENUM("admin", "user") DEFAULT "user"
+-- Table: users
+CREATE TABLE `users`
+(
+    `user_id`      int          NOT NULL AUTO_INCREMENT,
+    `full_name`    varchar(100) NOT NULL,
+    `email`        varchar(100) NOT NULL,
+    `password`     varchar(50)  NOT NULL,
+    `phone_number` varchar(20)  NOT NULL,
+    `address`      varchar(200) NOT NULL,
+    `role`         enum('admin','user') NOT NULL DEFAULT 'user',
+    PRIMARY KEY (`user_id`),
+    UNIQUE KEY `email_UNIQUE` (`email`)
 );
 
-CREATE TABLE stations (
-    station_id INT PRIMARY KEY AUTO_INCREMENT,
-    station_name VARCHAR(100) NOT NULL
+-- Table: stations
+CREATE TABLE `stations`
+(
+    `station_id`   int          NOT NULL AUTO_INCREMENT,
+    `station_name` varchar(100) NOT NULL,
+    PRIMARY KEY (`station_id`),
+    UNIQUE KEY `station_name_UNIQUE` (`station_name`)
 );
 
-CREATE TABLE trips (
-    trip_id INT PRIMARY KEY AUTO_INCREMENT,
-    source_station_name INT,
-    destination_station_name INT,
-    trip_date DATE,
-    trip_time VARCHAR(20),
-    FOREIGN KEY (source_station_name) REFERENCES stations(station_name),
-    FOREIGN KEY (destination_station_name) REFERENCES stations(station_name)
+-- Table: trains
+CREATE TABLE `trains`
+(
+    `train_id`   int         NOT NULL AUTO_INCREMENT,
+    `train_name` varchar(50) NOT NULL,
+    PRIMARY KEY (`train_id`),
+    UNIQUE KEY `train_name` (`train_name`)
 );
 
-CREATE TABLE booking (
-    booking_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    trip_id INT,
-    seat_number INT,
-    booking_time DATETIME,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (trip_id) REFERENCES trips(trip_id)
+-- Table: trips
+CREATE TABLE `trips`
+(
+    `trip_id`         int          NOT NULL AUTO_INCREMENT,
+    `station_from`    varchar(100) NOT NULL,
+    `station_to`      varchar(100) NOT NULL,
+    `train_name`      varchar(50)           DEFAULT NULL,
+    `available_seats` int          NOT NULL DEFAULT '50',
+    `journey_date`    varchar(15)  NOT NULL,
+    `journey_time`    varchar(15)  NOT NULL,
+    PRIMARY KEY (`trip_id`),
+    KEY               `trips_ibfk_1_idx` (`station_from`),
+    KEY               `trips_ibfk_2` (`station_to`),
+    CONSTRAINT `trips_ibfk_1` FOREIGN KEY (`station_from`) REFERENCES `stations` (`station_name`),
+    CONSTRAINT `trips_ibfk_2` FOREIGN KEY (`station_to`) REFERENCES `stations` (`station_name`)
 );
 
-CREATE TABLE seat_booked (
-    seat_id INT PRIMARY KEY AUTO_INCREMENT,
-    trip_id INT,
-    booking_id INT,
-    seat_number INT,
-    FOREIGN KEY (trip_id) REFERENCES trips(trip_id),
-    FOREIGN KEY (booking_id) REFERENCES booking(booking_id)
+-- Table: booking
+CREATE TABLE `booking`
+(
+    `booking_id`   int NOT NULL AUTO_INCREMENT,
+    `user_id`      int          DEFAULT NULL,
+    `trip_id`      int          DEFAULT NULL,
+    `seat_number`  int          DEFAULT NULL,
+    `booking_time` varchar(100) DEFAULT NULL,
+    PRIMARY KEY (`booking_id`),
+    KEY            `user_id` (`user_id`),
+    KEY            `trip_id` (`trip_id`),
+    CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+    CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`trip_id`) REFERENCES `trips` (`trip_id`)
+);
+
+-- Table: seat_booked
+CREATE TABLE `seat_booked`
+(
+    `seat_id`     int NOT NULL AUTO_INCREMENT,
+    `trip_id`     int DEFAULT NULL,
+    `booking_id`  int DEFAULT NULL,
+    `seat_number` int DEFAULT NULL,
+    PRIMARY KEY (`seat_id`),
+    KEY           `trip_id` (`trip_id`),
+    KEY           `booking_id` (`booking_id`),
+    CONSTRAINT `seat_booked_ibfk_1` FOREIGN KEY (`trip_id`) REFERENCES `trips` (`trip_id`),
+    CONSTRAINT `seat_booked_ibfk_2` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`booking_id`)
 );
