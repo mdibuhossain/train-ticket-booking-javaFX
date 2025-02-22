@@ -264,7 +264,7 @@
          <children>
             <HBox prefHeight="36.0" prefWidth="1000.0" style="-fx-background-color: white;">
                <children>
-                  <Label alignment="CENTER" prefHeight="48.0" prefWidth="184.0" text="Mamun Rail Ticket System" textAlignment="CENTER">
+                  <Label alignment="CENTER" prefHeight="48.0" prefWidth="184.0" text="Digital Railway Ticket System" textAlignment="CENTER">
                      <font>
                         <Font name="Sitka Text" size="12.0" />
                      </font>
