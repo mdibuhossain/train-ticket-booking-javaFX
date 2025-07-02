@@ -28,8 +28,8 @@ public class DBController {
         try {
             // Connect to MySQL server
             String baseUri = "jdbc:mysql://localhost:3306/";
-            String username = "root";
-            String password = "12345678";
+            String username = "admin";
+            String password = "admin123";
 
             connection = DriverManager.getConnection(baseUri, username, password);
             statement = connection.createStatement();

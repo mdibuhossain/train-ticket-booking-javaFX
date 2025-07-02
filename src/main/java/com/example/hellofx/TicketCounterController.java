@@ -183,13 +183,13 @@ public class TicketCounterController implements Initializable {
                         "%-15s %2s %-18s\n" +
                         "%-15s %2s %-18s\n" +
                         "%-15s %2s %-18s\n",
-                "Name", ":", "Muzahidul Islam",
-                "Train", ":", "Shuborna Express",
-                "From", ":", "Dhaka",
-                "To", ":", "Khulna",
-                "Date", ":", "1/1/2024",
-                "Time", ":", "9:45PM",
-                "Contact", ":", "01518455043"
+                "Name", ":", user.getFull_name(),
+                "Train", ":", train,
+                "From", ":", from,
+                "To", ":", to,
+                "Date", ":", date,
+                "Time", ":", time,
+                "Contact", ":", user.getPhone_number()
         ));
     }
 
@@ -204,6 +204,7 @@ public class TicketCounterController implements Initializable {
             String train = tripList.get(selectedID).getTrain();
             booked_trip_id = tripList.get(selectedID).getTrip_id();
             initSeats();
+            System.out.println("From: " + from + ", To: " + to + ", Date: " + date + ", Time: " + time + ", Train: " + train);
             initBookingInfo(from, to, train, date, time);
         }
     }
