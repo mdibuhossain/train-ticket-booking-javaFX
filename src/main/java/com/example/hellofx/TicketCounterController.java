@@ -3,6 +3,8 @@ package com.example.hellofx;
 import com.example.hellofx.models.Station;
 import com.example.hellofx.models.Trip;
 import com.example.hellofx.models.User;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Rectangle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,11 +13,17 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +31,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 
 public class TicketCounterController implements Initializable {
     @FXML
@@ -67,6 +76,8 @@ public class TicketCounterController implements Initializable {
     private ObservableList<Trip> tripList;
     private List<Station> stations;
     private User user = new User();
+    private String seatsBooked = "";
+    private ButtonType downloadButton;
     Set<Integer> selectedSeats = new TreeSet<>();
     Alert bookedConfirmation = new Alert(Alert.AlertType.INFORMATION);
     int selectTripID = 0;
@@ -182,15 +193,20 @@ public class TicketCounterController implements Initializable {
                         "%-15s %2s %-18s\n" +
                         "%-15s %2s %-18s\n" +
                         "%-15s %2s %-18s\n" +
+                        "%-15s %2s %-18s\n" +
                         "%-15s %2s %-18s\n",
                 "Name", ":", user.getFull_name(),
                 "Train", ":", train,
                 "From", ":", from,
                 "To", ":", to,
+                "Seat", ":", seatsBooked,
                 "Date", ":", date,
                 "Time", ":", time,
                 "Contact", ":", user.getPhone_number()
         ));
+        downloadButton = new ButtonType("Download", ButtonBar.ButtonData.OK_DONE);
+        ButtonType closeButton = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+        bookedConfirmation.getButtonTypes().setAll(downloadButton, closeButton);
     }
 
     @FXML
@@ -204,7 +220,6 @@ public class TicketCounterController implements Initializable {
             String train = tripList.get(selectedID).getTrain();
             booked_trip_id = tripList.get(selectedID).getTrip_id();
             initSeats();
-            System.out.println("From: " + from + ", To: " + to + ", Date: " + date + ", Time: " + time + ", Train: " + train);
             initBookingInfo(from, to, train, date, time);
         }
     }
@@ -252,6 +267,7 @@ public class TicketCounterController implements Initializable {
                         if (dispSeat.length() > 1)
                             dispSeat = new StringBuilder(dispSeat.substring(0, dispSeat.length() - 2));
                         booked_seats.setText(dispSeat.toString());
+                        seatsBooked = dispSeat.toString();
                     });
                 }
             }
@@ -279,7 +295,7 @@ public class TicketCounterController implements Initializable {
         }
         if (isInsertTrip > 0) {
             if (selectedSeats.size() > 0) {
-                if(tripTable.getSelectionModel().getSelectedIndex()>=0) {
+                if (tripTable.getSelectionModel().getSelectedIndex() >= 0) {
                     selectTripID = tripTable.getSelectionModel().getSelectedIndex();
                 }
                 System.out.println(selectTripID);
@@ -297,12 +313,65 @@ public class TicketCounterController implements Initializable {
                         searchTrip();
 //                        tripTable.getSelectionModel().getSelectedItem().setAvailable_seats(beforeSeats - selectedSeats.size());
                     }
-                    bookedConfirmation.showAndWait();
+                    Optional<ButtonType> result = bookedConfirmation.showAndWait();
+                    if (result.isPresent() && result.get() == downloadButton) {
+                        downloadReceiptAsPDF(booked_from.getText(), booked_to.getText(), booked_train.getText(), booked_date.getText(), booked_time.getText(), seatsBooked);
+                    }
                 } catch (Exception ignore) {
                     System.out.println(ignore.getMessage());
                 }
             }
             initSeats();
         }
+    }
+
+    public void downloadReceiptAsPDF(String from, String to, String train, String date, String time, String seatsBooked) {
+        Document document = new Document();
+        try {
+            // Save location
+            File pdfFile = new File("BookingReceipt.pdf");
+            PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+            document.open();
+
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+            Font contentFont = new Font(Font.FontFamily.HELVETICA, 12);
+
+            Paragraph title = new Paragraph("Booking Receipt\n\n", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            PdfPTable table = new PdfPTable(2);
+            table.setWidths(new int[]{1, 3});
+            table.setWidthPercentage(100);
+
+            addRow(table, "Name", user.getFull_name(), contentFont);
+            addRow(table, "Train", train, contentFont);
+            addRow(table, "From", from, contentFont);
+            addRow(table, "To", to, contentFont);
+            addRow(table, "Seats", seatsBooked, contentFont);
+            addRow(table, "Date", date, contentFont);
+            addRow(table, "Time", time, contentFont);
+            addRow(table, "Contact", user.getPhone_number(), contentFont);
+
+            document.add(table);
+            document.close();
+
+            // ✅ Open the file
+            if (pdfFile.exists()) {
+                Desktop.getDesktop().open(pdfFile);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addRow(PdfPTable table, String label, String value, Font font) {
+        PdfPCell cell1 = new PdfPCell(new Phrase(label, font));
+        PdfPCell cell2 = new PdfPCell(new Phrase(value, font));
+        cell1.setBorder(Rectangle.NO_BORDER);
+        cell2.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell1);
+        table.addCell(cell2);
     }
 }
